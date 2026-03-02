@@ -13,7 +13,6 @@ import { supabase } from "../../SupabaseClient";
 import { useEffect } from "react";
 import { UserAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -22,8 +21,19 @@ export default function Home() {
   const [pending, setPending] = useState(true);
   const { session, profile, loading } = UserAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const mode = searchParams.get("mode");
+
+ const isPWA = () => {
+  if (window.matchMedia('(display-mode: standalone)').matches ||
+      window.matchMedia('(display-mode: minimal-ui)').matches ||
+      window.matchMedia('(display-mode: fullscreen)').matches) {
+    return true;
+  }
+  // Fallback for iOS
+  if ('standalone' in navigator && navigator.standalone) {
+    return true;
+  }
+  return false;
+};
 
   useEffect(() => {
     const loadSession = () => {
@@ -81,7 +91,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">
-        {mode !== "mobile" && <HeroBanner />}
+        {!isPWA() && <HeroBanner />}
         <FeaturedShops shops={shops} />
         <div className="border-t border-border">
           <CategoryFilter
@@ -96,7 +106,7 @@ export default function Home() {
           />
         </div>
       </main>
-      {mode !== "mobile" && <Footer />}
+      {!isPWA() && <Footer />}
     </div>
   );
 }
