@@ -16,7 +16,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Delivering your favorite meals from the best local restaurants, straight to your door.
+              Discover the best local canteen stores and get your meals ready in minutes.
             </p>
           </div>
 
