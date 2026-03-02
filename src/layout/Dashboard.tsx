@@ -8,7 +8,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { UserAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect} from "react";
 
 export function DashboardLayout() {
   const { session, profile, loading } = UserAuth();
@@ -16,7 +16,6 @@ export function DashboardLayout() {
 
   useEffect(() => {
     const loadSession = () => {
-      console.log(session, loading)
       if (!loading && !session) {
         navigate("/");
         return;

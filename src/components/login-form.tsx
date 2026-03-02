@@ -58,7 +58,7 @@ export function LoginForm({
 
   return (
     <div
-      className={cn("w-full mx-20 md:w-[380px] flex flex-col gap-6", className)}
+      className={cn("w-full md:mx-20 md:w-[380px] flex flex-col gap-6", className)}
       {...props}
     >
       <Card>

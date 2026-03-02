@@ -154,7 +154,6 @@ function ProductCard({ product }: { product: Product }) {
             ₱{parseInt(product.price).toFixed(2)}
           </span>
 
-          {/* Footer Add to Cart button */}
           <Button
             onClick={() => handleAddCart(product.id)}
             size="sm"
