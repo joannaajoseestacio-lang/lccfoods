@@ -38,15 +38,10 @@ const navItems = [
     icon: ShoppingCart,
   },
   {
-    title: "Shop",
-    href: "/dashboard/shop",
+    title: "Settings",
+    href: "/dashboard/settings",
     icon: Store,
-  },
-  {
-    title: "Account",
-    href: "/dashboard/account",
-    icon: UserCircle,
-  },
+  }
 ];
 
 export function AppSidebar() {

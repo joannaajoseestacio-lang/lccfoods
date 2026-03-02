@@ -4,11 +4,13 @@ import Menu from "@/pages/Menu";
 import Dashboard from "@/pages/Dashboard";
 import DashProducts from "@/pages/DashProducts";
 import DashOrders from "@/pages/DashOrders";
+import DashSettings from "@/pages/DashSettings";
 import UserOrders from "@/pages/UserOrders";
 import Signup from "@/pages/Signup";
 import Cart from "@/pages/Cart";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { DashboardLayout } from "@/layout/Dashboard";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   return (
@@ -25,9 +27,10 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="products" element={<DashProducts />} />
           <Route path="orders" element={<DashOrders />} />
+          <Route path="settings" element={<DashSettings />} />
         </Route>
-
       </Routes>
+      <Toaster position="top-center" />
     </AuthContextProvider>
   );
 }

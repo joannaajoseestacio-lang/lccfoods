@@ -13,6 +13,10 @@ type Profile = {
   name: string;
   email: string;
   role: string;
+  shop_name: string;
+  shop_gcash: string;
+  shop_description: string;
+  image: string;
 };
 
 type AuthContextType = {

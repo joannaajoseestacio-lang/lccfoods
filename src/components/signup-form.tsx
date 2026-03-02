@@ -32,6 +32,7 @@ export function SignupForm({
 }: React.ComponentProps<"div">) {
   const { signupNewUser } = UserAuth();
 
+
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

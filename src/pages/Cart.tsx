@@ -242,8 +242,7 @@ export default function CartPage() {
     (sum, item) => sum + item.products.price * item.quantity,
     0,
   );
-  const vat = Math.round(subtotal * 0.1);
-  const total = subtotal + vat;
+  const total = subtotal;
 
   useEffect(() => {
     if (!profile?.uid) return;
@@ -411,7 +410,6 @@ export default function CartPage() {
                 </div>
                 <div className="px-6 py-5 space-y-3">
                   <SummaryRow label="Subtotal" value={`${subtotal.toLocaleString()}`} />
-                  <SummaryRow label="VAT (10%)" value={`${vat.toLocaleString()}`} />
                   <Separator />
                   <SummaryRow label="Total" value={`${total.toLocaleString()}`} bold />
                 </div>

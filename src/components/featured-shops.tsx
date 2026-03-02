@@ -4,6 +4,9 @@ import type { Shop } from "@/lib/data";
 import { useRef } from "react";
 
 function ShopCard({ shop }: { shop: Shop }) {
+  
+  if(!shop.shop_name) return null;
+
   return (
     <div className="group relative min-w-[280px] flex-shrink-0 cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg md:min-w-[320px]">
       <div className="relative h-44 overflow-hidden">
