@@ -37,59 +37,56 @@ function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
 
   const handleAddCart = async (productId: string) => {
+    if (!profile) {
+      navigate("/login");
+      return;
+    }
+
     try {
-      if (profile) {
-        let { data: cartData, error: cartError } = await supabase
-          .from("carts")
-          .select()
-          .eq("user_id", profile.uid)
-          .single();
+      let { data: cartData, error: cartError } = await supabase
+        .from("carts")
+        .select()
+        .eq("user_id", profile.uid)
+        .single();
 
-        if (cartError && cartError.code !== "PGRST116") {
-          throw cartError;
-        }
-
-        if (!cartData) {
-          const { data: newCart, error: insertCartError } = await supabase
-            .from("carts")
-            .insert([{ user_id: profile.uid }])
-            .select()
-            .single();
-
-          if (insertCartError) throw insertCartError;
-          cartData = newCart;
-        }
-
-        const { data: existingItem } = await supabase
-          .from("cart_items")
-          .select()
-          .eq("cart_id", cartData.id)
-          .eq("product_id", productId)
-          .single();
-
-        if (existingItem) {
-          const { error: updateError } = await supabase
-            .from("cart_items")
-            .update({ quantity: existingItem.quantity + 1 })
-            .eq("id", existingItem.id);
-
-          if (updateError) throw updateError;
-        } else {
-          const { error: insertItemError } = await supabase
-            .from("cart_items")
-            .insert([
-              {
-                cart_id: cartData.id,
-                product_id: productId,
-                quantity: 1,
-              },
-            ]);
-
-          if (insertItemError) throw insertItemError;
-        }
-
-        navigate("/cart");
+      if (cartError && cartError.code !== "PGRST116") {
+        throw cartError;
       }
+
+      if (!cartData) {
+        const { data: newCart, error: insertCartError } = await supabase
+          .from("carts")
+          .insert([{ user_id: profile.uid }])
+          .select()
+          .single();
+
+        if (insertCartError) throw insertCartError;
+        cartData = newCart;
+      }
+
+      const { data: existingItem } = await supabase
+        .from("cart_items")
+        .select()
+        .eq("cart_id", cartData.id)
+        .eq("product_id", productId)
+        .single();
+
+      if (existingItem) {
+        const { error: updateError } = await supabase
+          .from("cart_items")
+          .update({ quantity: existingItem.quantity + 1 })
+          .eq("id", existingItem.id);
+
+        if (updateError) throw updateError;
+      } else {
+        const { error: insertItemError } = await supabase
+          .from("cart_items")
+          .insert([{ cart_id: cartData.id, product_id: productId, quantity: 1 }]);
+
+        if (insertItemError) throw insertItemError;
+      }
+
+      navigate("/cart");
     } catch (error) {
       console.error("Failed to add to cart:", error);
     }
@@ -112,15 +109,19 @@ function ProductCard({ product }: { product: Product }) {
           {getStatusLabel(product.status)}
         </Badge>
 
-        <Button
-          onClick={() => handleAddCart(product.id)}
-          size="icon"
-          className="absolute bottom-3 right-3 h-9 w-9 rounded-full shadow-md opacity-0 transition-opacity group-hover:opacity-100"
-          aria-label={`Add ${product.name} to cart`}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
+        {/* Floating icon button on hover — hidden if no profile */}
+        {profile && (
+          <Button
+            onClick={() => handleAddCart(product.id)}
+            size="icon"
+            className="absolute bottom-3 right-3 h-9 w-9 rounded-full shadow-md opacity-0 transition-opacity group-hover:opacity-100"
+            aria-label={`Add ${product.name} to cart`}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        )}
       </div>
+
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1">
@@ -129,7 +130,7 @@ function ProductCard({ product }: { product: Product }) {
             </h3>
             <div className="mt-0.5 flex flex-row gap-2">
               <p className="text-xs text-muted-foreground">
-                {product.profiles.shop_name}{" "}
+                {product.profiles.shop_name}
               </p>
               <p className="capitalize text-xs text-primary">
                 {product.category}
@@ -143,13 +144,26 @@ function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         </div>
+
         <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
           {product.description}
         </p>
+
         <div className="mt-auto flex items-center justify-between pt-3">
           <span className="text-base font-bold text-foreground">
             ₱{parseInt(product.price).toFixed(2)}
           </span>
+
+          {/* Footer Add to Cart button */}
+          <Button
+            onClick={() => handleAddCart(product.id)}
+            size="sm"
+            className="flex items-center gap-1 rounded-full text-xs"
+            aria-label={`Add ${product.name} to cart`}
+          >
+            <Plus className="h-3 w-3" />
+            Add to Cart
+          </Button>
         </div>
       </div>
     </div>

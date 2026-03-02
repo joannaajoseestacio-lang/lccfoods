@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../SupabaseClient";
 import { UserAuth } from "@/context/AuthContext";
 import { Package, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const STATUS_STYLES: Record<string, string> = {
   pending: "bg-amber-50 text-amber-700 ring-amber-200",
@@ -212,10 +212,10 @@ export default function MyOrdersPage() {
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold text-gray-800 tracking-tight mb-1">My Orders</h1>
-          <a href="/" className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors">
+          <Link to="/" className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors">
             <ArrowLeft className="w-3 h-3" />
             Continue shopping
-          </a>
+          </Link>
         </div>
 
         <div className="flex gap-1.5 flex-wrap mb-5">

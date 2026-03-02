@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { UserAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "../../SupabaseClient";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function QuantityControl({
   quantity,
@@ -354,13 +354,13 @@ export default function CartPage() {
               </span>
             )}
           </h1>
-          <a
-            href="/"
+          <Link
+            to="/"
             className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors"
           >
             <ArrowLeft className="w-3 h-3" />
             Continue shopping
-          </a>
+          </Link>
         </div>
 
         {loading ? (
