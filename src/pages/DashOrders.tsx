@@ -45,7 +45,7 @@ function ViewModal({ order, onClose, onEdit }: { order: any; onClose: () => void
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <div>
             <p className="text-xs text-slate-400 font-medium tracking-widest uppercase">Order Details</p>
-            <h2 className="text-lg font-semibold text-slate-800">{order.id}</h2>
+            <h2 className="text-lg font-semibold text-slate-800">{order.id.slice(0, 8).toUpperCase()}</h2>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors text-2xl leading-none">&times;</button>
         </div>

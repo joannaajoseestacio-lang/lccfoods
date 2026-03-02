@@ -1,28 +1,29 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Navbar } from "@/components/navbar"
-import { HeroBanner } from "@/components/hero-banner"
-import { FeaturedShops } from "@/components/featured-shops"
-import { CategoryFilter } from "@/components/category-filter"
-import { ProductGrid } from "@/components/product-grid"
-import { Footer } from "@/components/footer"
-import { categories, type Shop } from "@/lib/data"
-import {
-  type Product,
-} from "@/lib/data";
+import { useState } from "react";
+import { Navbar } from "@/components/navbar";
+import { HeroBanner } from "@/components/hero-banner";
+import { FeaturedShops } from "@/components/featured-shops";
+import { CategoryFilter } from "@/components/category-filter";
+import { ProductGrid } from "@/components/product-grid";
+import { Footer } from "@/components/footer";
+import { categories, type Shop } from "@/lib/data";
+import { type Product } from "@/lib/data";
 import { supabase } from "../../SupabaseClient";
 import { useEffect } from "react";
 import { UserAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export default function Home() {
-  const [activeCategory, setActiveCategory] = useState("all")
+  const [activeCategory, setActiveCategory] = useState("all");
   const [products, setProducts] = useState<Product[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [pending, setPending] = useState(true);
   const { session, profile, loading } = UserAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get("mode");
 
   useEffect(() => {
     const loadSession = () => {
@@ -30,8 +31,8 @@ export default function Home() {
         navigate("/");
         return;
       }
-      if(!loading && profile) {
-        if(profile.role === 'staff') {
+      if (!loading && profile) {
+        if (profile.role === "staff") {
           navigate("/dashboard");
           return;
         }
@@ -43,20 +44,20 @@ export default function Home() {
   useEffect(() => {
     const loadProducts = async () => {
       setPending(true);
-        const { data } = await supabase
-          .from("products")
-          .select(`*, profiles (id, image, shop_name)`)
-        if (data) {
-          const malinis = data.map((item) => {
-            return {
-              ...item,
-              price: parseInt(item.price),
-              createdAt: item.created_at,
-            };
-          });
-          setProducts(malinis);
-        }
-        setPending(false);
+      const { data } = await supabase
+        .from("products")
+        .select(`*, profiles (id, image, shop_name)`);
+      if (data) {
+        const malinis = data.map((item) => {
+          return {
+            ...item,
+            price: parseInt(item.price),
+            createdAt: item.created_at,
+          };
+        });
+        setProducts(malinis);
+      }
+      setPending(false);
     };
     loadProducts();
   }, []);
@@ -64,13 +65,14 @@ export default function Home() {
   useEffect(() => {
     const loadShops = async () => {
       setPending(true);
-        const { data } = await supabase
-          .from("profiles")
-          .select().eq("role", "staff")
-        if (data) {
-          setShops(data);
-        }
-        setPending(false);
+      const { data } = await supabase
+        .from("profiles")
+        .select()
+        .eq("role", "staff");
+      if (data) {
+        setShops(data);
+      }
+      setPending(false);
     };
     loadShops();
   }, []);
@@ -79,7 +81,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">
-        <HeroBanner />
+        {mode !== "mobile" && <HeroBanner />}
         <FeaturedShops shops={shops} />
         <div className="border-t border-border">
           <CategoryFilter
@@ -87,10 +89,14 @@ export default function Home() {
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
           />
-          <ProductGrid products={products} pending={pending} activeCategory={activeCategory} />
+          <ProductGrid
+            products={products}
+            pending={pending}
+            activeCategory={activeCategory}
+          />
         </div>
       </main>
-      <Footer />
+      {mode !== "mobile" && <Footer />}
     </div>
-  )
+  );
 }

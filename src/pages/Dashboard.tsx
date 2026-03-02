@@ -115,7 +115,7 @@ export default function Home() {
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Total Products" value={products} loading={loading} />
         <StatCard label="Total Orders" value={orders} loading={loading} />
-        <StatCard label="Revenue" value="₱12,450" loading={loading} isRaw />
+        <StatCard label="Revenue" value="₱0" loading={loading} isRaw />
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">

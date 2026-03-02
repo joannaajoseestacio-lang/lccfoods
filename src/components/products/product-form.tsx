@@ -83,8 +83,6 @@ export function ProductForm({ product, onChange, disabled = false }: ProductForm
           className="min-h-20"
         />
       </div>
-
-      {/* Image upload */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="image">Image</Label>
         <Input
