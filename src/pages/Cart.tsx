@@ -194,7 +194,7 @@ export default function CartPage() {
   const [loading, setLoading] = useState(true);
   const { profile, session, loading: profileLoading } = UserAuth();
     const navigate = useNavigate();
-    const [reference, setRef] = useState(null);
+    const [reference, setRef] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const loadSession = () => {
@@ -319,7 +319,7 @@ export default function CartPage() {
             customer_id: profile.uid,
             status: "pending",
             receipt: receipts[storeId] ?? null,
-            reference,
+            reference: reference[storeId] ?? null,
             store_id: storeUid,
           }])
           .select();
@@ -437,13 +437,13 @@ export default function CartPage() {
                   uploading={uploadingMap[storeId] ?? false}
                   onFileChange={handleFileChange(storeId)}
                   onReferenceChange={setRef}
-                  reference_number={reference}
+                  reference_number={reference[storeId] ?? null}
                 />
               ))}
 
               <Button
                 className="w-full h-12 rounded-xl text-xs uppercase tracking-widest font-semibold text-white shadow-sm transition-all active:scale-[0.99]"
-                disabled={!allReceiptsUploaded || reference.length !== 13}
+                disabled={!allReceiptsUploaded || reference['store_id'].length !== 13}
                 onClick={handleOrder}
               >
                 Place Order
