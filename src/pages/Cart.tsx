@@ -50,7 +50,15 @@ function QuantityControl({
   );
 }
 
-function CartItem({ item, onQtyChange, onRemove }: { item: any; onQtyChange: any; onRemove: any }) {
+function CartItem({
+  item,
+  onQtyChange,
+  onRemove,
+}: {
+  item: any;
+  onQtyChange: any;
+  onRemove: any;
+}) {
   const lineTotal = item.products.price * item.quantity;
   return (
     <div className="flex gap-4 py-5">
@@ -98,20 +106,55 @@ function CartItem({ item, onQtyChange, onRemove }: { item: any; onQtyChange: any
   );
 }
 
-function SummaryRow({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) {
+function SummaryRow({
+  label,
+  value,
+  bold = false,
+}: {
+  label: string;
+  value: string;
+  bold?: boolean;
+}) {
   return (
-    <div className={`flex justify-between text-sm ${bold ? "font-semibold text-gray-800" : "text-gray-500"}`}>
+    <div
+      className={`flex justify-between text-sm ${bold ? "font-semibold text-gray-800" : "text-gray-500"}`}
+    >
       <span>{label}</span>
       <span>{value}</span>
     </div>
   );
 }
 
-function ShopPaymentCard({ shop, items, receipt, reference_number, uploading, onFileChange, onReferenceChange }: { shop: any; items: any[]; receipt: string | null; uploading: boolean; onFileChange: any, onReferenceChange: any, reference_number: string }) {
+function isValidReference(ref: string): boolean {
+  return /^\d{13}$/.test(ref.trim());
+}
+
+function ShopPaymentCard({
+  shop,
+  items,
+  receipt,
+  reference_number,
+  uploading,
+  onFileChange,
+  onReferenceChange,
+}: {
+  shop: any;
+  items: any[];
+  receipt: string | null;
+  reference_number: string;
+  uploading: boolean;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onReferenceChange: (val: string) => void;
+}) {
   const shopSubtotal = items.reduce(
     (sum, item) => sum + item.products.price * item.quantity,
     0,
   );
+
+  const refValid = isValidReference(reference_number);
+  const refTouched = reference_number.length > 0;
+  const showRefError = refTouched && !refValid;
+
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
@@ -171,17 +214,33 @@ function ShopPaymentCard({ shop, items, receipt, reference_number, uploading, on
               className="hidden"
             />
           </label>
+
           <Label className="text-xs mt-4 font-medium text-gray-500 uppercase tracking-wider">
             Reference Number
           </Label>
-          <div>
-            <Input
-            placeholder="Enter gcash reference number" 
-            type="number" 
-            onChange={(e) => onReferenceChange(e.target.value) }
-            value={reference_number} />
-          </div>
-
+          <Input
+            placeholder="Enter 13-digit GCash reference"
+            type="text"
+            inputMode="numeric"
+            maxLength={13}
+            onChange={(e) => {
+              // Only allow digits
+              const val = e.target.value.replace(/\D/g, "");
+              onReferenceChange(val);
+            }}
+            value={reference_number}
+            className={showRefError ? "border-red-400 focus-visible:ring-red-300" : ""}
+          />
+          {showRefError && (
+            <p className="text-[11px] text-red-500 mt-1">
+              Reference number must be exactly 13 digits.
+            </p>
+          )}
+          {refValid && (
+            <p className="text-[11px] text-green-500 mt-1">
+              ✓ Valid reference number
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -193,9 +252,9 @@ export default function CartPage() {
   const [receipts, setReceipts] = useState<Record<string, string>>({});
   const [uploadingMap, setUploadingMap] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
+  const [reference, setReference] = useState<Record<string, string>>({});
   const { profile, session, loading: profileLoading } = UserAuth();
-    const navigate = useNavigate();
-    const [reference, setRef] = useState<Record<string, string>>({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadSession = () => {
@@ -209,7 +268,10 @@ export default function CartPage() {
 
   const shopGroups: Record<string, { shop: any; items: any[]; uid: string }> =
     items.reduce(
-      (acc: Record<string, { shop: any; items: any[]; uid: string }>, item: any) => {
+      (
+        acc: Record<string, { shop: any; items: any[]; uid: string }>,
+        item: any,
+      ) => {
         const storeId = item.products.profiles.id;
         if (!acc[storeId]) {
           acc[storeId] = {
@@ -229,6 +291,14 @@ export default function CartPage() {
   const allReceiptsUploaded =
     shopGroupList.length > 0 &&
     shopGroupList.every(([storeId]) => !!receipts[storeId]);
+
+  const allReferencesValid =
+    shopGroupList.length > 0 &&
+    shopGroupList.every(([storeId]) =>
+      isValidReference(reference[storeId] ?? ""),
+    );
+
+  const canPlaceOrder = allReceiptsUploaded && allReferencesValid;
 
   const handleQtyChange = async (id: string, delta: number) => {
     setItems((prev) =>
@@ -297,17 +367,21 @@ export default function CartPage() {
           setReceipts((prev) => ({ ...prev, [storeId]: data.url }));
         } else {
           toast.error("Upload failed", {
-            description: "Failed to upload receipt"
+            description: "Failed to upload receipt",
           });
         }
       } catch (err) {
         toast.error("Upload failed", {
-            description: "Failed to upload receipt"
-          });
+          description: "Failed to upload receipt",
+        });
       } finally {
         setUploadingMap((prev) => ({ ...prev, [storeId]: false }));
       }
     };
+
+  const handleReferenceChange = (storeId: string) => (val: string) => {
+    setReference((prev) => ({ ...prev, [storeId]: val }));
+  };
 
   const handleOrder = async () => {
     try {
@@ -320,13 +394,15 @@ export default function CartPage() {
       for (const [storeId, { items: shopItems, uid: storeUid }] of shopGroupList) {
         const { data: insertedOrder, error: orderError } = await supabase
           .from("orders")
-          .insert([{
-            customer_id: profile.uid,
-            status: "pending",
-            receipt: receipts[storeId] ?? null,
-            reference: reference[storeId] ?? null,
-            store_id: storeUid,
-          }])
+          .insert([
+            {
+              customer_id: profile.uid,
+              status: "pending",
+              receipt: receipts[storeId] ?? null,
+              reference: reference[storeId] ?? null,
+              store_id: storeUid,
+            },
+          ])
           .select();
         if (orderError || !insertedOrder?.length) {
           console.error("Order insert error:", orderError);
@@ -352,14 +428,19 @@ export default function CartPage() {
       }
       setItems([]);
       setReceipts({});
+      setReference({});
       toast.success("Order successful!", {
-        description: "Order request successfully sent to the seller!"
+        description: "Order request successfully sent to the seller!",
       });
     } catch (error) {
       console.error("Order failed:", error);
       alert("Failed to place order. Please try again.");
     }
   };
+
+  // Determine helper text below Place Order button
+  const missingReceipt = !allReceiptsUploaded;
+  const missingReference = !allReferencesValid;
 
   return (
     <div className="min-h-screen bg-[#f8f7f4]">
@@ -396,7 +477,7 @@ export default function CartPage() {
               Looks like you have not added anything yet.
             </p>
             <a href="/">
-              <Button className=" text-white text-xs uppercase tracking-widest rounded-lg px-8">
+              <Button className="text-white text-xs uppercase tracking-widest rounded-lg px-8">
                 Start Shopping
               </Button>
             </a>
@@ -429,9 +510,16 @@ export default function CartPage() {
                   </p>
                 </div>
                 <div className="px-6 py-5 space-y-3">
-                  <SummaryRow label="Subtotal" value={`${subtotal.toLocaleString()}`} />
+                  <SummaryRow
+                    label="Subtotal"
+                    value={`${subtotal.toLocaleString()}`}
+                  />
                   <Separator />
-                  <SummaryRow label="Total" value={`${total.toLocaleString()}`} bold />
+                  <SummaryRow
+                    label="Total"
+                    value={`${total.toLocaleString()}`}
+                    bold
+                  />
                 </div>
               </div>
 
@@ -443,22 +531,26 @@ export default function CartPage() {
                   receipt={receipts[storeId] ?? null}
                   uploading={uploadingMap[storeId] ?? false}
                   onFileChange={handleFileChange(storeId)}
-                  onReferenceChange={setRef}
-                  reference_number={reference[storeId] ?? null}
+                  onReferenceChange={handleReferenceChange(storeId)}
+                  reference_number={reference[storeId] ?? ""}
                 />
               ))}
 
               <Button
-                className="w-full h-12 rounded-xl text-xs uppercase tracking-widest font-semibold text-white shadow-sm transition-all active:scale-[0.99]"
-                disabled={!allReceiptsUploaded}
+                className="w-full h-12 rounded-xl text-xs uppercase tracking-widest font-semibold text-white shadow-sm transition-all active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!canPlaceOrder}
                 onClick={handleOrder}
               >
                 Place Order
               </Button>
 
-              {allReceiptsUploaded && (
+              {!canPlaceOrder && (
                 <p className="text-center text-[11px] text-gray-400">
-                  Upload a receipt for each store to continue
+                  {missingReceipt && missingReference
+                    ? "Upload a receipt and enter a valid 13-digit reference for each store to continue"
+                    : missingReceipt
+                      ? "Upload a receipt for each store to continue"
+                      : "Enter a valid 13-digit GCash reference for each store to continue"}
                 </p>
               )}
             </div>

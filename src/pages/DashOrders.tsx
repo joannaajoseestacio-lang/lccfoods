@@ -105,7 +105,7 @@ function ViewModal({
                 )}
               </div>
             ))}
-            {order.receipt && order.reference && (
+            {order.receipt && (
               <div className="space-y-4">
                 <div className="col-span-2">
                   <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">
