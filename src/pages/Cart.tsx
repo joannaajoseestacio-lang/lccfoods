@@ -454,13 +454,13 @@ export default function CartPage() {
 
               <Button
                 className="w-full h-12 rounded-xl text-xs uppercase tracking-widest font-semibold text-white shadow-sm transition-all active:scale-[0.99]"
-                disabled={!allReceiptsUploaded || !allReferecesUploaded}
+                disabled={!allReceiptsUploaded}
                 onClick={handleOrder}
               >
                 Place Order
               </Button>
 
-              {(!allReceiptsUploaded || !allReferecesUploaded) && (
+              {allReceiptsUploaded && (
                 <p className="text-center text-[11px] text-gray-400">
                   Upload a receipt for each store to continue
                 </p>
