@@ -19,7 +19,7 @@ export function HeroBanner() {
           Skip long queues, enjoy your food
         </h1>
         <p className="mt-4 max-w-md text-pretty text-base leading-relaxed text-primary-foreground/80 md:text-lg">
-          Discover the best local canteen stores and get your meals ready in minutes. Skip long queues and ebjoy your foods.
+          Discover the best local canteen stores and get your meals ready in minutes. Skip long lines and enjoy your foods.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Button size="lg" className="rounded-full gap-2 px-6 font-semibold">

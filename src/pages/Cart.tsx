@@ -15,6 +15,7 @@ import { UserAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "../../SupabaseClient";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function QuantityControl({
   quantity,
@@ -295,10 +296,14 @@ export default function CartPage() {
         if (data?.url) {
           setReceipts((prev) => ({ ...prev, [storeId]: data.url }));
         } else {
-          alert("Upload failed: no URL returned");
+          toast.error("Upload failed", {
+            description: "Failed to upload receipt"
+          });
         }
       } catch (err) {
-        alert("Image upload failed");
+        toast.error("Upload failed", {
+            description: "Failed to upload receipt"
+          });
       } finally {
         setUploadingMap((prev) => ({ ...prev, [storeId]: false }));
       }
@@ -347,7 +352,9 @@ export default function CartPage() {
       }
       setItems([]);
       setReceipts({});
-      alert("Order placed successfully!");
+      toast.success("Order successful!", {
+        description: "Order request successfully sent to the seller!"
+      });
     } catch (error) {
       console.error("Order failed:", error);
       alert("Failed to place order. Please try again.");
