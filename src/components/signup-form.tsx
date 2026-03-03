@@ -37,7 +37,6 @@ export function SignupForm({
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [accountType, setAccountType] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -58,7 +57,7 @@ export function SignupForm({
 
     try {
       setLoading(true);
-      console.log(name, email, password, accountType)
+      console.log(name, email, password, "student")
       
       const { success, error } = await signupNewUser(email, password, name, accountType);
 
@@ -114,22 +113,7 @@ export function SignupForm({
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Field>
-
-              <Field>
-                <FieldLabel>Account Type</FieldLabel>
-                <Select onValueChange={setAccountType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select account type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="student">Student</SelectItem>
-                      <SelectItem value="staff">Staff</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </Field>
-
+  
               <Field>
                 <div className="grid grid-cols-2 gap-4">
                   <Field>

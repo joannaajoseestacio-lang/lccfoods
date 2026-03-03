@@ -174,7 +174,11 @@ function ShopPaymentCard({ shop, items, receipt, reference_number, uploading, on
             Reference Number
           </Label>
           <div>
-            <Input placeholder="Enter gcash reference number" type="number" onChange={(e) => onReferenceChange(e.target.value)} value={reference_number} />
+            <Input
+            placeholder="Enter gcash reference number" 
+            type="number" 
+            onChange={(e) => onReferenceChange(e.target.value) }
+            value={reference_number} />
           </div>
 
         </div>
@@ -439,7 +443,7 @@ export default function CartPage() {
 
               <Button
                 className="w-full h-12 rounded-xl text-xs uppercase tracking-widest font-semibold text-white shadow-sm transition-all active:scale-[0.99]"
-                disabled={!allReceiptsUploaded}
+                disabled={!allReceiptsUploaded || reference.length !== 13}
                 onClick={handleOrder}
               >
                 Place Order

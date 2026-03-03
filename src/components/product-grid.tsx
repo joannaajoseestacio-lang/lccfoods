@@ -81,7 +81,9 @@ function ProductCard({ product }: { product: Product }) {
       } else {
         const { error: insertItemError } = await supabase
           .from("cart_items")
-          .insert([{ cart_id: cartData.id, product_id: productId, quantity: 1 }]);
+          .insert([
+            { cart_id: cartData.id, product_id: productId, quantity: 1 },
+          ]);
 
         if (insertItemError) throw insertItemError;
       }
@@ -153,16 +155,17 @@ function ProductCard({ product }: { product: Product }) {
           <span className="text-base font-bold text-foreground">
             ₱{parseInt(product.price).toFixed(2)}
           </span>
-
-          <Button
-            onClick={() => handleAddCart(product.id)}
-            size="sm"
-            className="flex items-center gap-1 rounded-full text-xs"
-            aria-label={`Add ${product.name} to cart`}
-          >
-            <Plus className="h-3 w-3" />
-            Add to Cart
-          </Button>
+          {product.status === "available" && (
+            <Button 
+              onClick={() => handleAddCart(product.id)}
+              size="sm"
+              className="flex items-center gap-1 rounded-full text-xs"
+              aria-label={`Add ${product.name} to cart`}
+            >
+              <Plus className="h-3 w-3" />
+              Add to Cart
+            </Button>
+          )}
         </div>
       </div>
     </div>
