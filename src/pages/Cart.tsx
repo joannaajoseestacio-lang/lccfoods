@@ -443,7 +443,7 @@ export default function CartPage() {
 
               <Button
                 className="w-full h-12 rounded-xl text-xs uppercase tracking-widest font-semibold text-white shadow-sm transition-all active:scale-[0.99]"
-                disabled={!allReceiptsUploaded || reference['store_id'].length !== 13}
+                disabled={!allReceiptsUploaded}
                 onClick={handleOrder}
               >
                 Place Order
