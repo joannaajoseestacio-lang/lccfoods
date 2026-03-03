@@ -9,13 +9,13 @@ export function HeroBanner() {
           src="https://laconcepcioncollege.com/wp-content/uploads/2011/04/3.jpg" alt="Delicious food spread"
           className="object-cover w-full h-screen"
         />
-        <div className="absolute inset-0 bg-foreground/60" />
+        <div className="absolute inset-0 bg-pink-400/90" />
       </div>
       <div className="relative mx-auto flex max-w-7xl flex-col items-start justify-center px-4 py-20 md:py-28 lg:px-6 lg:py-32">
         <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary-foreground/80">
           LCC Foods
         </p>
-        <h1 className="max-w-xl text-balance font-serif text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl">
+        <h1 className="max-w-xl text-balance font-serif text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
           Skip long queues, enjoy your food
         </h1>
         <p className="mt-4 max-w-md text-pretty text-base leading-relaxed text-primary-foreground/80 md:text-lg">

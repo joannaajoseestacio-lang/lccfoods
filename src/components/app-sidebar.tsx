@@ -20,6 +20,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { UserAuth } from "@/context/AuthContext";
+import logo from "@/assets/logo.jpg"
 
 const navItems = [
   {
@@ -51,10 +52,10 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="px-4 py-5">
         <Link to="#" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-            <Store className="h-4 w-4" />
+          <div className="flex h-8 w-8">
+            <img className="h-8 w-8 rounded-2xl" src={logo} alt="logo" />
           </div>
-          <span className="text-lg font-semibold tracking-tight text-sidebar-foreground">
+          <span className="text-lg font-semibold tracking-tight text-pink-500">
             LCCFoods
           </span>
         </Link>

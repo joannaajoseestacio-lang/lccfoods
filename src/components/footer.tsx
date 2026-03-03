@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom"
-import { ShoppingBag } from "lucide-react"
+import logo from "@/assets/logo.jpg"
 
 export function Footer() {
   return (
@@ -8,8 +8,8 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <ShoppingBag className="h-4 w-4 text-primary-foreground" />
+              <div className="flex h-8 w-8">
+                <img className="h-8 w-8 rounded-2xl" src={logo} alt="logo" />
               </div>
               <span className="text-lg font-bold tracking-tight text-foreground font-serif">
                 LCCFoods

@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
 import {
   Search,
-  ShoppingBag,
   LogOut,
   LogIn,
   LoaderCircle,
   ClipboardList,
+  ShoppingBag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "../../SupabaseClient";
+import logo from "@/assets/logo.jpg";
 
 export function Navbar() {
   const { signOut, profile } = UserAuth();
@@ -46,10 +47,10 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <ShoppingBag className="h-5 w-5 text-primary-foreground" />
+            <div className="flex h-9 w-9">
+              <img className="h-9 w-9 rounded-2xl" src={logo} alt="logo" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-foreground font-serif">
+            <span className="text-lg font-semibold tracking-tight text-pink-500">
               LCCFoods
             </span>
           </Link>
