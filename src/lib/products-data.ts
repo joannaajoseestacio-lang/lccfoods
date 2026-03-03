@@ -8,8 +8,9 @@ export type ProductCategory =
   | "snacks"
   | "desserts"
   | "noodles"
-  | "beverages";
-
+  | "beverages"
+  | "rice"
+  | "other"
 export interface Product {
   id: string;
   name: string;
@@ -29,6 +30,8 @@ export const CATEGORIES: ProductCategory[] = [
   "desserts",
   "noodles",
   "beverages",
+  "rice",
+  "other"
 ];
 
 export const STATUSES: { value: ProductStatus; label: string }[] = [

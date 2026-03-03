@@ -3,7 +3,9 @@ import {
   Flame,
   Cake,
   Beer,
-  Soup
+  Soup,
+  CookingPot,
+  Vegan
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -12,7 +14,9 @@ const iconMap: Record<string, React.ElementType> = {
   Flame,
   Cake,
   Beer,
-  Soup
+  Soup,
+  CookingPot,
+  Vegan
 }
 
 interface Category {

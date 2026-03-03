@@ -57,13 +57,13 @@ export function ProductsToolbar({
         </div>
         <div className="flex items-center gap-2">
           <Select value={categoryFilter} onValueChange={(v) => onCategoryFilterChange(v as ProductCategory | "all")}>
-            <SelectTrigger className="w-[170px]">
-              <SelectValue placeholder="Category" />
+            <SelectTrigger className="w-[170px] capitalize">
+              <SelectValue placeholder="Category" className="capitalize" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
               {CATEGORIES.map((cat) => (
-                <SelectItem key={cat} value={cat}>
+                <SelectItem key={cat} value={cat} className="capitalize">
                   {cat}
                 </SelectItem>
               ))}

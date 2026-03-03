@@ -8,6 +8,8 @@ export type ProductCategory =
   | "Snacks"
   | "Desserts"
   | "Noodles"
+  | "CookingPot"
+  | "Vegan"
   
 export interface Shop {
   id: string
@@ -42,4 +44,6 @@ export const categories = [
   { id: "desserts", label: "Desserts", icon: "Cake" },
   { id: "noodles", label: "Noddles", icon: "Soup" },
   { id: "beverages", label: "Beverages", icon: "Beer" },
+  { id: "rice", label: "Rice", icon: "CookingPot" },
+  { id: "other", label: "Other", icon: "Vegan" },
 ] as const
