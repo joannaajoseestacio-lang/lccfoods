@@ -1,12 +1,14 @@
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function HeroBanner() {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src="https://laconcepcioncollege.com/wp-content/uploads/2011/04/3.jpg" alt="Delicious food spread"
+          src="https://laconcepcioncollege.com/wp-content/uploads/2011/04/3.jpg"
+          alt="Delicious food spread"
           className="object-cover w-full h-screen"
         />
         <div className="absolute inset-0 bg-pink-400/90" />
@@ -19,22 +21,18 @@ export function HeroBanner() {
           Skip long queues, enjoy your food
         </h1>
         <p className="mt-4 max-w-md text-pretty text-base leading-relaxed text-primary-foreground/80 md:text-lg">
-          Discover the best local canteen stores and get your meals ready in minutes. Skip long lines and enjoy your foods.
+          Discover the best local canteen stores and get your meals ready in
+          minutes. Skip long lines and enjoy your foods.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Button size="lg" className="rounded-full gap-2 px-6 font-semibold">
-            Order Now
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="rounded-full border-primary-foreground/30 bg-primary-foreground/10 px-6 font-semibold text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
-          >
-            View Menu
-          </Button>
+          <Link to="#products">
+            <Button size="lg" className="rounded-full gap-2 px-6 font-semibold">
+              View Menu
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -190,7 +190,7 @@ export function ProductGrid({
       : products.filter((p) => p.category === activeCategory);
 
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-16 lg:px-6">
+    <section className="mx-auto max-w-7xl px-4 pb-16 lg:px-6" id="products">
       <div className="mb-6 flex items-end justify-between">
         <div>
           <h2 className="font-serif text-2xl font-bold text-foreground md:text-3xl">

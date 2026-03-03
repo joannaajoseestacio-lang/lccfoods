@@ -438,7 +438,6 @@ export default function CartPage() {
     }
   };
 
-  // Determine helper text below Place Order button
   const missingReceipt = !allReceiptsUploaded;
   const missingReference = !allReferencesValid;
 

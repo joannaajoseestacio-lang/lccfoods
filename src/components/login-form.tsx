@@ -1,23 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { UserAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "@/assets/logo.jpg";
 
 function getAuthErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -39,10 +27,7 @@ function getAuthErrorMessage(error: unknown): string {
       return "Too many failed attempts. Please wait a moment and try again.";
     if (msg.includes("network-request-failed") || msg.includes("network"))
       return "Network error. Please check your connection and try again.";
-    if (
-      msg.includes("email-not-verified") ||
-      msg.includes("email not verified")
-    )
+    if (msg.includes("email-not-verified") || msg.includes("email not verified"))
       return "Please verify your email address before logging in.";
     if (msg.includes("invalid login credentials"))
       return "Incorrect email or password. Please try again.";
@@ -69,12 +54,10 @@ export function LoginForm({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       setLoading(true);
       const { error } = await signInUser(email, password);
-      if(error) {
-        console.log(error)
+      if (error) {
         toast.error("Login failed", { description: error.message });
         return;
       }
@@ -98,85 +81,120 @@ export function LoginForm({
 
   return (
     <div
-      className={cn(
-        "w-full max-w-sm mx-auto px-4 sm:px-0 flex flex-col gap-6",
-        className
-      )}
+      className={cn("w-full flex flex-col gap-5 px-4 sm:px-0 sm:w-[420px]", className)}
       {...props}
     >
-      <Card className="w-full shadow-md">
-        <CardHeader className="space-y-1 pb-4">
-          <CardTitle className="text-xl sm:text-2xl">
-            Login to your account
-          </CardTitle>
-          <CardDescription className="text-sm">
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
+      {/* Header */}
+      <div className="text-center space-y-1">
+        <div className="inline-flex mb-3">
+          <img className="h-16 w-16 rounded-2xl" src={logo} alt="logo" />
+        </div>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+          Welcome back
+        </h1>
+        <p className="text-sm text-zinc-500">
+          Sign in to continue your learning journey
+        </p>
+      </div>
 
-        <CardContent>
-          <form onSubmit={handleLogin} noValidate>
-            <FieldGroup className="space-y-4">
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="atejo@gmail.com"
-                  required
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={loading}
-                  className="w-full"
-                />
-              </Field>
+      {/* Form Card */}
+      <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-4">
+        <form onSubmit={handleLogin} noValidate className="space-y-4">
+          {/* Email */}
+          <div className="space-y-1.5">
+            <label htmlFor="email" className="text-sm font-medium text-zinc-700">
+              Email address
+            </label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              className="h-10 rounded-lg border-zinc-200 bg-zinc-50 focus:bg-white transition-colors text-sm w-full"
+            />
+          </div>
 
-              <Field>
-                <div className="flex items-center justify-between">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="/forgot-password"
-                    className="text-sm text-muted-foreground underline-offset-4 hover:underline hover:text-foreground transition-colors"
-                    tabIndex={loading ? -1 : undefined}
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={loading}
-                  className="w-full"
-                />
-              </Field>
+          {/* Password */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="text-sm font-medium text-zinc-700">
+                Password
+              </label>
+              <a
+                href="/forgot-password"
+                className="text-xs text-zinc-400 hover:text-zinc-600 underline underline-offset-2 transition-colors"
+                tabIndex={loading ? -1 : undefined}
+              >
+                Forgot password?
+              </a>
+            </div>
+            <Input
+              id="password"
+              type="password"
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              className="h-10 rounded-lg border-zinc-200 bg-zinc-50 focus:bg-white transition-colors text-sm w-full"
+            />
+          </div>
 
-              <Field className="pt-1">
-                <Button
-                  type="submit"
-                  disabled={loading || !email || !password}
-                  className="w-full"
-                >
-                  {loading ? "Logging in…" : "Log In"}
-                </Button>
-                <FieldDescription className="text-center text-sm text-muted-foreground">
-                  Don&apos;t have an account?{" "}
-                  <a
-                    href="/signup"
-                    className="text-foreground underline underline-offset-4 hover:text-primary transition-colors"
-                  >
-                    Sign up
-                  </a>
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
+          {/* Submit */}
+          <Button
+            type="submit"
+            disabled={loading || !email || !password}
+            className="w-full h-10 rounded-lg text-white text-sm font-medium transition-colors mt-1"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                </svg>
+                Signing in…
+              </span>
+            ) : (
+              "Log In"
+            )}
+          </Button>
+        </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-zinc-100" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white px-3 text-xs text-zinc-400">or</span>
+          </div>
+        </div>
+
+        <p className="text-center text-sm text-zinc-500">
+          Don&apos;t have an account?{" "}
+          <a
+            href="/signup"
+            className="font-medium text-zinc-900 underline underline-offset-2 hover:text-zinc-600 transition-colors"
+          >
+            Sign up
+          </a>
+        </p>
+      </div>
+
+      <p className="text-center text-xs text-zinc-400 px-4">
+        By signing in, you agree to our{" "}
+        <a href="#" className="underline underline-offset-2 hover:text-zinc-600 transition-colors">
+          Terms of Service
+        </a>{" "}
+        and{" "}
+        <a href="#" className="underline underline-offset-2 hover:text-zinc-600 transition-colors">
+          Privacy Policy
+        </a>
+        .
+      </p>
     </div>
   );
 }
