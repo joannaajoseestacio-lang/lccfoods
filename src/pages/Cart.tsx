@@ -230,10 +230,6 @@ export default function CartPage() {
     shopGroupList.length > 0 &&
     shopGroupList.every(([storeId]) => !!receipts[storeId]);
 
-  const allReferecesUploaded =
-    shopGroupList.length > 0 &&
-    shopGroupList.every(([storeId]) => !!reference[storeId]);
-
   const handleQtyChange = async (id: string, delta: number) => {
     setItems((prev) =>
       prev.map((item) =>
