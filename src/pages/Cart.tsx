@@ -230,6 +230,10 @@ export default function CartPage() {
     shopGroupList.length > 0 &&
     shopGroupList.every(([storeId]) => !!receipts[storeId]);
 
+  const allReferecesUploaded =
+    shopGroupList.length > 0 &&
+    shopGroupList.every(([storeId]) => !!reference[storeId]);
+
   const handleQtyChange = async (id: string, delta: number) => {
     setItems((prev) =>
       prev.map((item) =>
@@ -450,13 +454,13 @@ export default function CartPage() {
 
               <Button
                 className="w-full h-12 rounded-xl text-xs uppercase tracking-widest font-semibold text-white shadow-sm transition-all active:scale-[0.99]"
-                disabled={!allReceiptsUploaded}
+                disabled={!allReceiptsUploaded || !allReferecesUploaded}
                 onClick={handleOrder}
               >
                 Place Order
               </Button>
 
-              {!allReceiptsUploaded && (
+              {(!allReceiptsUploaded || !allReferecesUploaded) && (
                 <p className="text-center text-[11px] text-gray-400">
                   Upload a receipt for each store to continue
                 </p>
