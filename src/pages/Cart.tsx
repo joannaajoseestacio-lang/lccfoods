@@ -396,7 +396,7 @@ export default function CartPage() {
               Looks like you have not added anything yet.
             </p>
             <a href="/">
-              <Button className="bg-gray-800 hover:bg-gray-700 text-white text-xs uppercase tracking-widest rounded-lg px-8">
+              <Button className=" text-white text-xs uppercase tracking-widest rounded-lg px-8">
                 Start Shopping
               </Button>
             </a>
