@@ -106,7 +106,7 @@ function SummaryRow({ label, value, bold = false }: { label: string; value: stri
   );
 }
 
-function ShopPaymentCard({ shop, items, receipt, uploading, onFileChange }: { shop: any; items: any[]; receipt: string | null; uploading: boolean; onFileChange: any }) {
+function ShopPaymentCard({ shop, items, receipt, reference_number, uploading, onFileChange, onReferenceChange }: { shop: any; items: any[]; receipt: string | null; uploading: boolean; onFileChange: any, onReferenceChange: any, reference_number: string }) {
   const shopSubtotal = items.reduce(
     (sum, item) => sum + item.products.price * item.quantity,
     0,
@@ -170,6 +170,13 @@ function ShopPaymentCard({ shop, items, receipt, uploading, onFileChange }: { sh
               className="hidden"
             />
           </label>
+          <Label className="text-xs mt-4 font-medium text-gray-500 uppercase tracking-wider">
+            Reference Number
+          </Label>
+          <div>
+            <Input placeholder="Enter gcash reference number" type="number" onChange={(e) => onReferenceChange(e.target.value)} value={reference_number} />
+          </div>
+
         </div>
       </div>
     </div>
@@ -183,6 +190,7 @@ export default function CartPage() {
   const [loading, setLoading] = useState(true);
   const { profile, session, loading: profileLoading } = UserAuth();
     const navigate = useNavigate();
+    const [reference, setRef] = useState(null);
 
   useEffect(() => {
     const loadSession = () => {
@@ -307,6 +315,7 @@ export default function CartPage() {
             customer_id: profile.uid,
             status: "pending",
             receipt: receipts[storeId] ?? null,
+            reference,
             store_id: storeUid,
           }])
           .select();
@@ -423,6 +432,8 @@ export default function CartPage() {
                   receipt={receipts[storeId] ?? null}
                   uploading={uploadingMap[storeId] ?? false}
                   onFileChange={handleFileChange(storeId)}
+                  onReferenceChange={setRef}
+                  reference_number={reference}
                 />
               ))}
 

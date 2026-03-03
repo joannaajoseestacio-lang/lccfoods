@@ -56,7 +56,7 @@ export function AppSidebar() {
             <img className="h-8 w-8 rounded-2xl" src={logo} alt="logo" />
           </div>
           <span className="text-lg font-semibold tracking-tight text-pink-500">
-            LCCFoods
+            LCC Canteen
           </span>
         </Link>
       </SidebarHeader>

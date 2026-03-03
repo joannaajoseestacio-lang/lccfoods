@@ -76,6 +76,7 @@ export function LoginForm({
       if(error) {
         console.log(error)
         toast.error("Login failed", { description: error.message });
+        return;
       }
     } catch (err) {
       const description = getAuthErrorMessage(err);

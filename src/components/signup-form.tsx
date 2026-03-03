@@ -25,6 +25,7 @@ import {
 import { UserAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
+import { toast } from "sonner";
 
 export function SignupForm({
   className,
@@ -59,7 +60,12 @@ export function SignupForm({
       setLoading(true);
       console.log(name, email, password, accountType)
       
-      const { success } = await signupNewUser(email, password, name, accountType);
+      const { success, error } = await signupNewUser(email, password, name, accountType);
+
+      if(error) {
+        toast.error("Signup failed", { description: error.message });
+        return;
+      }
       if(success) {
         navigate('/');
       }

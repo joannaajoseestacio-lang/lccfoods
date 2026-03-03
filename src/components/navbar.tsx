@@ -51,7 +51,7 @@ export function Navbar() {
               <img className="h-9 w-9 rounded-2xl" src={logo} alt="logo" />
             </div>
             <span className="text-lg font-semibold tracking-tight text-pink-500">
-              LCCFoods
+              LCC Canteen
             </span>
           </Link>
         </div>

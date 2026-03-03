@@ -2,6 +2,7 @@ import { Star, ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Shop } from "@/lib/data";
 import { useRef } from "react";
+import logo from "@/assets/logo.jpg"
 
 function ShopCard({ shop }: { shop: Shop }) {
   
@@ -11,7 +12,7 @@ function ShopCard({ shop }: { shop: Shop }) {
     <div className="group relative min-w-[280px] flex-shrink-0 cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg md:min-w-[320px]">
       <div className="relative h-44 overflow-hidden">
         <img
-          src={shop.image}
+          src={shop.image || logo}
           alt={shop.shop_name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
