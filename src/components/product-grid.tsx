@@ -111,16 +111,19 @@ function ProductCard({ product }: { product: Product }) {
           {getStatusLabel(product.status)}
         </Badge>
 
-        {/* Floating icon button on hover — hidden if no profile */}
-        {profile && (
-          <Button
-            onClick={() => handleAddCart(product.id)}
-            size="icon"
-            className="absolute bottom-3 right-3 h-9 w-9 rounded-full shadow-md opacity-0 transition-opacity group-hover:opacity-100"
-            aria-label={`Add ${product.name} to cart`}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
+        {product.status === "available" && (
+          <>
+            {profile && (
+              <Button
+                onClick={() => handleAddCart(product.id)}
+                size="icon"
+                className="absolute bottom-3 right-3 h-9 w-9 rounded-full shadow-md opacity-0 transition-opacity group-hover:opacity-100"
+                aria-label={`Add ${product.name} to cart`}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            )}
+          </>
         )}
       </div>
 
@@ -156,7 +159,7 @@ function ProductCard({ product }: { product: Product }) {
             ₱{parseInt(product.price).toFixed(2)}
           </span>
           {product.status === "available" && (
-            <Button 
+            <Button
               onClick={() => handleAddCart(product.id)}
               size="sm"
               className="flex items-center gap-1 rounded-full text-xs"
