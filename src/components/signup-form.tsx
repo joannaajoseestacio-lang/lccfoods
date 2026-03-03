@@ -14,14 +14,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { UserAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
@@ -59,7 +51,7 @@ export function SignupForm({
       setLoading(true);
       console.log(name, email, password, "student")
       
-      const { success, error } = await signupNewUser(email, password, name, accountType);
+      const { success, error } = await signupNewUser(email, password, name, "student");
 
       if(error) {
         toast.error("Signup failed", { description: error.message });
