@@ -93,7 +93,7 @@ export function LoginForm({
           Welcome back
         </h1>
         <p className="text-sm text-zinc-500">
-          Sign in to continue your learning journey
+          Sign in to continue to order foods.
         </p>
       </div>
 

@@ -442,7 +442,7 @@ export default function CartPage() {
   const missingReference = !allReferencesValid;
 
   return (
-    <div className="min-h-screen bg-[#f8f7f4]">
+    <div className="min-h-screen bg-background">
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold text-gray-800 tracking-tight mb-1">

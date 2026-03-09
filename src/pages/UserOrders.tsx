@@ -3,6 +3,7 @@ import { supabase } from "../../SupabaseClient";
 import { UserAuth } from "@/context/AuthContext";
 import { Package, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const STATUS_STYLES: Record<string, string> = {
   pending: "bg-amber-50 text-amber-700 ring-amber-200",
@@ -65,7 +66,7 @@ function StatusTracker({ status }: { status: string }) {
         return (
           <div key={step} className="flex items-center flex-1 last:flex-none">
             <div className="flex flex-col items-center gap-1.5">
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${done ? "bg-slate-800" : "bg-slate-100"}`}>
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${done ? "bg-primary" : "bg-slate-100"}`}>
                 {done && i < currentStep ? (
                   <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path d="M20 6 9 17l-5-5" />
@@ -74,12 +75,12 @@ function StatusTracker({ status }: { status: string }) {
                   <span className={`w-2 h-2 rounded-full ${done ? "bg-white" : "bg-slate-300"}`} />
                 )}
               </div>
-              <span className={`text-[10px] font-medium capitalize whitespace-nowrap ${active ? "text-slate-800" : done ? "text-slate-500" : "text-slate-300"}`}>
+              <span className={`text-[10px] font-medium capitalize whitespace-nowrap ${active ? "text-primary" : done ? "text-slate-500" : "text-slate-300"}`}>
                 {step}
               </span>
             </div>
             {i < STATUS_STEPS.length - 1 && (
-              <div className={`flex-1 h-0.5 mb-5 mx-1 rounded-full transition-all ${i < currentStep ? "bg-slate-800" : "bg-slate-100"}`} />
+              <div className={`flex-1 h-0.5 mb-5 mx-1 rounded-full transition-all ${i < currentStep ? "bg-primary" : "bg-slate-100"}`} />
             )}
           </div>
         );
@@ -93,7 +94,7 @@ function OrderCard({ order }: { order: any }) {
   const total = getTotal(order.order_items ?? []);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       <div
         className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-slate-50/60 transition-colors"
         onClick={() => setExpanded((p) => !p)}
@@ -208,7 +209,7 @@ export default function MyOrdersPage() {
   const filtered = orders.filter((o) => filter === "all" || o.status === filter);
 
   return (
-    <div className="min-h-screen bg-[#f8f7f4]">
+    <div className="min-h-screen bg-background">
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold text-gray-800 tracking-tight mb-1">My Orders</h1>
@@ -220,13 +221,14 @@ export default function MyOrdersPage() {
 
         <div className="flex gap-1.5 flex-wrap mb-5">
           {FILTERS.map((f) => (
-            <button
+            <Button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize ${filter === f ? "bg-slate-800 text-white shadow-sm" : "bg-white text-slate-500 border border-gray-200 hover:bg-slate-50"}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize`}
+              variant={filter === f ? "default" : "outline"}
             >
               {f}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -237,9 +239,9 @@ export default function MyOrdersPage() {
             <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h2 className="text-xl font-medium text-gray-500 mb-1">No orders yet</h2>
             <p className="text-gray-400 text-sm mb-6">Your orders will appear here once you place them.</p>
-            <a href="/" className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-xs uppercase tracking-widest rounded-lg px-8 py-3 transition-colors">
-              Start Shopping
-            </a>
+            <Link to="/">
+              <Button>Start Shopping</Button>
+            </Link>
           </div>
         ) : (
           <div className="space-y-3">

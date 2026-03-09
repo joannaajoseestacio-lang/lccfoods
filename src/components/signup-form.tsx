@@ -60,7 +60,6 @@ export function SignupForm({
       )}
       {...props}
     >
-      {/* Header */}
       <div className="text-center space-y-1">
         <div className="inline-flex mb-3">
           <img className="h-16 w-16 rounded-2xl" src={logo} alt="logo" />
@@ -69,7 +68,7 @@ export function SignupForm({
           Create your account
         </h1>
         <p className="text-sm text-zinc-500">
-          Start your learning journey today
+          Sign in to continue to order foods.
         </p>
       </div>
 
