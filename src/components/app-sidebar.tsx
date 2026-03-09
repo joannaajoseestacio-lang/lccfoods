@@ -55,7 +55,7 @@ export function AppSidebar() {
           <div className="flex h-8 w-8">
             <img className="h-8 w-8 rounded-2xl" src={logo} alt="logo" />
           </div>
-          <span className="text-lg font-semibold tracking-tight text-pink-500">
+          <span className="text-lg font-semibold tracking-tight text-blue-500">
             LCC Canteen
           </span>
         </Link>

@@ -11,7 +11,7 @@ export function HeroBanner() {
           alt="Delicious food spread"
           className="object-cover w-full h-screen"
         />
-        <div className="absolute inset-0 bg-pink-400/90" />
+        <div className="absolute inset-0 bg-blue-400/90" />
       </div>
       <div className="relative mx-auto flex max-w-7xl flex-col items-start justify-center px-4 py-20 md:py-28 lg:px-6 lg:py-32">
         <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary-foreground/80">

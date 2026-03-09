@@ -11,7 +11,7 @@ export function Footer() {
               <div className="flex h-8 w-8">
                 <img className="h-8 w-8 rounded-2xl" src={logo} alt="logo" />
               </div>
-              <span className="text-lg font-bold tracking-tight text-pink-400 font-serif">
+              <span className="text-lg font-bold tracking-tight text-blue-400 font-serif">
                 LCC Canteen
               </span>
             </Link>
