@@ -18,8 +18,8 @@ export default defineConfig({
         short_name: "LCC Foods",
         description:
           "Integrated Digital Food Ordering Application for La Concepcion College Kaypian Campus, Incorporation",
-        theme_color: "#f6339a",
-        background_color: "#f6339a",
+        theme_color: "#2b7fff",
+        background_color: "#2b7fff",
         display: "standalone",
         start_url: "/",
         icons: [
