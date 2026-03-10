@@ -43,11 +43,6 @@ const navItems = [
     title: "Canteen Stores",
     href: "/admin/stores",
     icon: Store,
-  },
-  {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
   }
 ];
 
