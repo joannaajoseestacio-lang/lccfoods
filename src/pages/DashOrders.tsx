@@ -95,7 +95,7 @@ function ViewModal({
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div>
             <p className="text-xs text-muted-foreground font-medium tracking-widest uppercase">Order Details</p>
-            <h2 className="text-lg font-semibold font-mono">{order.id.slice(0, 8).toUpperCase()} <span className="text-red-400 text-sm">High Priority</span></h2>
+            <h2 className="text-lg font-semibold font-mono">{order.id.slice(0, 8).toUpperCase()} {order.profiles?.role === 'teacher' && <span className="text-red-400 text-sm">High Priority</span>}</h2>
           </div>
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors text-2xl leading-none">&times;</button>
         </div>
