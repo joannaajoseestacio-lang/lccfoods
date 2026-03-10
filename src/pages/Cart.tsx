@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../SupabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { NavbarGoBack } from "@/components/navbar";
 
 function QuantityControl({
   quantity,
@@ -443,8 +444,9 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <NavbarGoBack label="My Cart" />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-        <div className="mb-8">
+        <div className="mb-8 hidden md:block">
           <h1 className="text-3xl font-semibold text-gray-800 tracking-tight mb-1">
             Cart
             {items.length > 0 && (

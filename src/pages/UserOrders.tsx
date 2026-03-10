@@ -4,6 +4,7 @@ import { UserAuth } from "@/context/AuthContext";
 import { Package, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { NavbarGoBack } from "@/components/navbar";
 
 const STATUS_STYLES: Record<string, string> = {
   pending: "bg-amber-50 text-amber-700 ring-amber-200",
@@ -210,8 +211,9 @@ export default function MyOrdersPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <NavbarGoBack label="My Orders" />
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
-        <div className="mb-8">
+        <div className="mb-8 hidden md:block">
           <h1 className="text-3xl font-semibold text-gray-800 tracking-tight mb-1">My Orders</h1>
           <Link to="/" className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors">
             <ArrowLeft className="w-3 h-3" />

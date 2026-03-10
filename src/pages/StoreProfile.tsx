@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../SupabaseClient";
 import { useEffect, useState } from "react";
-import { Navbar } from "@/components/navbar";
+import { NavbarGoBack } from "@/components/navbar";
 import { ProductGrid } from "@/components/product-grid";
-import { type Shop, type Product } from "@/lib/data";
+import { categories, type Shop, type Product } from "@/lib/data";
+import { CategoryFilter } from "@/components/category-filter";
 
 export default function StoreProfile() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ export default function StoreProfile() {
   const [store, setStore] = useState<Shop | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [pending, setPending] = useState(true);
+   const [activeCategory, setActiveCategory] = useState("all");
 
   useEffect(() => {
     if (!id) return;
@@ -32,9 +34,9 @@ export default function StoreProfile() {
       const { data } = await supabase
         .from("products")
         .select(`*, profiles (id, image, shop_name)`)
-        .eq('user_id', id)
+        .eq("user_id", id);
 
-        console.log(data)
+      console.log(data);
 
       if (data) {
         const cleaned = data.map((item) => ({
@@ -53,7 +55,7 @@ export default function StoreProfile() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <NavbarGoBack label={`${store?.shop_name} profile`} />
 
       <main className="flex-1">
         <div className="relative h-52 bg-muted overflow-hidden">
@@ -69,11 +71,10 @@ export default function StoreProfile() {
         </div>
 
         {/* Store Info */}
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto md:px-4">
           <div className="flex items-center gap-4 py-4 mb-2">
-
             {/* Store Name & Details */}
-            <div className="pb-1">
+            <div className="pb-1 px-4">
               {store ? (
                 <>
                   <h1 className="text-2xl font-bold leading-tight">
@@ -99,11 +100,15 @@ export default function StoreProfile() {
 
           {/* Products Section */}
           <div className="py-2">
-            <h2 className="text-lg font-semibold mb-2">Products</h2>
+            <CategoryFilter
+              categories={categories}
+              activeCategory={activeCategory}
+              onCategoryChange={setActiveCategory}
+            />
             <ProductGrid
               products={products}
               pending={pending}
-              activeCategory="all"
+              activeCategory={activeCategory}
             />
             {!pending && products.length === 0 && (
               <div className="py-20 text-center text-muted-foreground">
