@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import type { Shop } from "@/lib/data";
 import { useRef } from "react";
 import logo from "@/assets/logo.jpg"
+import { Link } from "react-router-dom";
 
 function ShopCard({ shop }: { shop: Shop }) {
   
   if(!shop.shop_name) return null;
 
   return (
-    <div className="group relative min-w-[280px] flex-shrink-0 cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg md:min-w-[320px]">
+    <Link to={`/store/${shop.uid}`} className="group relative min-w-[280px] flex-shrink-0 cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg md:min-w-[320px]">
       <div className="relative h-44 overflow-hidden">
         <img
           src={shop.image || logo}
@@ -36,7 +37,7 @@ function ShopCard({ shop }: { shop: Shop }) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

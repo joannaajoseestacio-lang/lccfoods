@@ -17,6 +17,7 @@ import { AuthContextProvider } from "@/context/AuthContext";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { AdminDashboardLayout } from "@/layout/AdminDashboard";
 import { Toaster } from "@/components/ui/sonner";
+import StoreProfile from "@/pages/StoreProfile"
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<UserOrders />} />
+        <Route path="/store/:id" element={<StoreProfile />} />
 
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
