@@ -37,7 +37,7 @@ export function SignupForm({
 
   const navigate = useNavigate();
 
-  // Reset student-fetched state when account type changes
+  // Reset fields when account type changes
   useEffect(() => {
     setFirstName("");
     setLastName("");
@@ -46,10 +46,12 @@ export function SignupForm({
     setStudentFound(false);
   }, [accountType]);
 
-  // Fetch student data when ID number is entered and account type is student
+  // Fetch student/teacher data when ID number is entered
   useEffect(() => {
-    if (accountType !== "student" || idNo.length < 4) {
-      if (accountType === "student" && idNo.length === 0) {
+    const isLookupType = accountType === "student" || accountType === "teacher";
+
+    if (!isLookupType || idNo.length < 4) {
+      if (isLookupType && idNo.length === 0) {
         setStudentFound(false);
         setFirstName("");
         setLastName("");
@@ -61,11 +63,22 @@ export function SignupForm({
     const timeout = setTimeout(async () => {
       try {
         setFetchingStudent(true);
-        const { data, error } = await supabase
-          .from("students")
-          .select("firstname, lastname, email")
-          .eq("student_number", idNo)
-          .single();
+
+        let data, error;
+
+        if (accountType === "student") {
+          ({ data, error } = await supabase
+            .from("students")
+            .select("firstname, lastname, email")
+            .eq("student_number", idNo)
+            .single());
+        } else {
+          ({ data, error } = await supabase
+            .from("teachers")
+            .select("firstname, lastname, email")
+            .eq("teacher_id", idNo)
+            .single());
+        }
 
         if (error || !data) {
           setStudentFound(false);
@@ -79,7 +92,9 @@ export function SignupForm({
         setLastName(data.lastname ?? "");
         setEmail(data.email ?? "");
         setStudentFound(true);
-        toast.success("Student record found");
+        toast.success(
+          `${accountType === "student" ? "Student" : "Teacher"} record found`
+        );
       } catch (err) {
         console.error(err);
         setStudentFound(false);
@@ -142,8 +157,8 @@ export function SignupForm({
     }
   }, [profile, navigate]);
 
-  // Student fields are always read-only — filled automatically via student ID lookup
-  const isStudent = accountType === "student";
+  // Student AND teacher fields are read-only — filled automatically via ID lookup
+  const isAutoFilled = accountType === "student" || accountType === "teacher";
 
   return (
     <div
@@ -217,7 +232,7 @@ export function SignupForm({
                     onChange={(e) => setIDNo(e.target.value)}
                     className="h-10 rounded-lg border-gray-200 bg-gray-50 focus:bg-white transition-colors text-sm pr-8"
                   />
-                  {accountType === "student" && fetchingStudent && (
+                  {fetchingStudent && (
                     <span className="absolute right-2 top-1/2 -translate-y-1/2">
                       <svg
                         className="animate-spin h-4 w-4 text-gray-400"
@@ -240,8 +255,10 @@ export function SignupForm({
                       </svg>
                     </span>
                   )}
-                  {accountType === "student" && studentFound && !fetchingStudent && (
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-500 text-xs">✓</span>
+                  {studentFound && !fetchingStudent && (
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-500 text-xs">
+                      ✓
+                    </span>
                   )}
                 </div>
               </div>
@@ -260,10 +277,10 @@ export function SignupForm({
                 required
                 value={firstname}
                 onChange={(e) => setFirstName(e.target.value)}
-                disabled={isStudent}
+                disabled={isAutoFilled}
                 className={cn(
                   "h-10 rounded-lg border-gray-200 bg-gray-50 focus:bg-white transition-colors text-sm",
-                  isStudent && "opacity-60 cursor-not-allowed bg-gray-100"
+                  isAutoFilled && "opacity-60 cursor-not-allowed bg-gray-100"
                 )}
               />
             </div>
@@ -278,10 +295,10 @@ export function SignupForm({
                 required
                 value={lastname}
                 onChange={(e) => setLastName(e.target.value)}
-                disabled={isStudent}
+                disabled={isAutoFilled}
                 className={cn(
                   "h-10 rounded-lg border-gray-200 bg-gray-50 focus:bg-white transition-colors text-sm",
-                  isStudent && "opacity-60 cursor-not-allowed bg-gray-100"
+                  isAutoFilled && "opacity-60 cursor-not-allowed bg-gray-100"
                 )}
               />
             </div>
@@ -299,10 +316,10 @@ export function SignupForm({
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={isStudent}
+              disabled={isAutoFilled}
               className={cn(
                 "h-10 rounded-lg border-gray-200 bg-gray-50 focus:bg-white transition-colors text-sm",
-                isStudent && "opacity-60 cursor-not-allowed bg-gray-100"
+                isAutoFilled && "opacity-60 cursor-not-allowed bg-gray-100"
               )}
             />
           </div>
@@ -345,7 +362,11 @@ export function SignupForm({
           {/* Submit */}
           <Button
             type="submit"
-            disabled={loading || fetchingStudent || (isStudent && !studentFound)}
+            disabled={
+              loading ||
+              fetchingStudent ||
+              (isAutoFilled && !studentFound)
+            }
             className="w-full h-10 rounded-lg text-white text-sm font-medium transition-colors mt-1"
           >
             {loading ? (
