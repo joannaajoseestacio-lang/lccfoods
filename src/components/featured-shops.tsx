@@ -57,10 +57,10 @@ export function FeaturedShops({ shops }: { shops: Shop[] }) {
     <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
       <div className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          Handpicked for you
+          LCC Canteen
         </p>
         <h2 className="mt-1 font-serif text-2xl font-bold text-foreground md:text-3xl">
-          Featured Restaurants
+          Stores
         </h2>
       </div>
 
