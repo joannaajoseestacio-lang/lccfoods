@@ -39,7 +39,7 @@ interface Order {
   customer_id: string
   receipt?: string
   reference?: string
-  profiles?: { name: string; email: string }
+  profiles?: { name: string; email: string, role: string }
   order_items?: { quantity: number; products: { name: string; price: number } }[]
 }
 
@@ -95,7 +95,7 @@ function ViewModal({
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div>
             <p className="text-xs text-muted-foreground font-medium tracking-widest uppercase">Order Details</p>
-            <h2 className="text-lg font-semibold font-mono">{order.id.slice(0, 8).toUpperCase()}</h2>
+            <h2 className="text-lg font-semibold font-mono">{order.id.slice(0, 8).toUpperCase()} <span className="text-red-400 text-sm">High Priority</span></h2>
           </div>
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors text-2xl leading-none">&times;</button>
         </div>
@@ -270,7 +270,7 @@ export default function OrdersPage() {
       setLoading(true)
       const { data, error } = await supabase
         .from("orders")
-        .select("*, profiles!orders_customer_id_fkey(name, email), order_items(*, products(name, price))")
+        .select("*, profiles!orders_customer_id_fkey(name, email, role), order_items(*, products(name, price))")
         .eq("store_id", profile.uid)
         .order("created_at", { ascending: false })
       if (!error && data) setOrders(data)
@@ -351,6 +351,7 @@ export default function OrdersPage() {
               <TableRow className="bg-muted/40 hover:bg-muted/40">
                 <TableHead>Order</TableHead>
                 <TableHead>Customer</TableHead>
+                <TableHead>Type</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead className="text-right">Items</TableHead>
                 <TableHead className="text-right">Amount</TableHead>
@@ -378,6 +379,9 @@ export default function OrdersPage() {
                       <span className="font-medium">{order.profiles?.name ?? "—"}</span>
                       <span className="text-xs text-muted-foreground">{order.profiles?.email ?? "—"}</span>
                     </div>
+                  </TableCell>
+                  <TableCell className="capitalize">
+                    <Badge className={order.profiles.role === 'teacher' ? "bg-pink-400" : "bg-gray-100 text-gray-900"}>{order.profiles.role}</Badge>
                   </TableCell>
 
                   {/* Date */}
