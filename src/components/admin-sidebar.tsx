@@ -5,8 +5,7 @@ import {
   UserCircle,
   DoorOpen,
   ShieldUser,
-  UserStar,
-  Settings,
+  UserStar
 } from "lucide-react";
 import {
   Sidebar,
