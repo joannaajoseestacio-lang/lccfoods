@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
-  Package,
-  ShoppingCart,
   Store,
   UserCircle,
   DoorOpen,
+  ShieldUser,
+  UserStar,
+  Settings,
 } from "lucide-react";
 import {
   Sidebar,
@@ -24,24 +25,29 @@ import logo from "@/assets/logo.jpg"
 
 const navItems = [
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: "Overview",
+    href: "/admin",
     icon: LayoutDashboard,
   },
   {
-    title: "My Products",
-    href: "/dashboard/products",
-    icon: Package,
+    title: "Students",
+    href: "/admin/students",
+    icon: UserStar,
   },
   {
-    title: "Orders",
-    href: "/dashboard/orders",
-    icon: ShoppingCart,
+    title: "Teachers",
+    href: "/admin/teachers",
+    icon: ShieldUser,
+  },
+  {
+    title: "Canteen Stores",
+    href: "/admin/stores",
+    icon: Store,
   },
   {
     title: "Settings",
-    href: "/dashboard/settings",
-    icon: Store,
+    href: "/admin/settings",
+    icon: Settings,
   }
 ];
 
@@ -55,8 +61,8 @@ export function AppSidebar() {
           <div className="flex h-8 w-8">
             <img className="h-8 w-8 rounded-2xl" src={logo} alt="logo" />
           </div>
-          <span className="text-lg font-semibold tracking-tight text-blue-500 font-serif">
-            LCC Canteen
+          <span className="text-md font-semibold tracking-tight text-blue-500 font-serif">
+            LCC Canteen <span className="text-xs font-mono bg-primary text-white px-1.5 rounded py-[1px]">Admin</span>
           </span>
         </Link>
       </SidebarHeader>

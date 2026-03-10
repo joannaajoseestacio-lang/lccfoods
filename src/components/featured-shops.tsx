@@ -28,7 +28,7 @@ function ShopCard({ shop }: { shop: Shop }) {
         <h3 className="text-base font-semibold text-card-foreground">
           {shop.shop_name}
         </h3>
-        <p className="mt-0.5 text-sm text-muted-foreground">{shop.shop_gcash}</p>
+        <p className="mt-0.5 text-sm text-muted-foreground">{shop.name}</p>
         <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <Info className="h-3.5 w-3.5" />

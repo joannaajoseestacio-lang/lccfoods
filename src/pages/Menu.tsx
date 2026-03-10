@@ -19,7 +19,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [pending, setPending] = useState(true);
-  const { session, profile, loading } = UserAuth();
+  const { profile } = UserAuth();
   const navigate = useNavigate();
 
  const isPWA = () => {
@@ -36,20 +36,16 @@ export default function Home() {
 };
 
   useEffect(() => {
-    const loadSession = () => {
-      if (!loading && !session) {
+    if (profile) {
+      if (profile.role === "admin") {
+        navigate("/admin");
+      } else if (profile.role === "staff") {
+        navigate("/dashboard");
+      } else {
         navigate("/");
-        return;
       }
-      if (!loading && profile) {
-        if (profile.role === "staff") {
-          navigate("/dashboard");
-          return;
-        }
-      }
-    };
-    loadSession();
-  }, [session, profile, loading]);
+    }
+  }, [profile, navigate]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -78,7 +74,8 @@ export default function Home() {
       const { data } = await supabase
         .from("profiles")
         .select()
-        .eq("role", "staff");
+        .eq("role", "staff")
+        .eq("shop_status", "approved");
       if (data) {
         setShops(data);
       }

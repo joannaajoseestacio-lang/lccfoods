@@ -71,9 +71,11 @@ export function LoginForm({
 
   useEffect(() => {
     if (profile) {
-      if (profile.role === "staff") {
+      if (profile.role === "admin") {
+        navigate("/admin");
+      } else if (profile.role === "staff") {
         navigate("/dashboard");
-      } else if (profile.role === "student") {
+      } else {
         navigate("/");
       }
     }
@@ -84,21 +86,21 @@ export function LoginForm({
       className={cn("w-full flex flex-col gap-5 px-4 sm:px-0 sm:w-[420px]", className)}
       {...props}
     >
-      {/* Header */}
-      <div className="text-center space-y-1">
-        <div className="inline-flex mb-3">
-          <img className="h-16 w-16 rounded-2xl" src={logo} alt="logo" />
-        </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-          Welcome back
-        </h1>
-        <p className="text-sm text-zinc-500">
-          Sign in to continue to order foods.
-        </p>
-      </div>
 
       {/* Form Card */}
       <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-4">
+        <div className="text-center space-y-1 border-b pb-6">
+          <div className="inline-flex mb-3">
+            <img className="h-16 w-16 rounded-2xl" src={logo} alt="logo" />
+          </div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Welcome back!
+          </h1>
+          <p className="text-sm text-zinc-500">
+            Sign in to continue to order foods.
+          </p>
+        </div>
+        
         <form onSubmit={handleLogin} noValidate className="space-y-4">
           {/* Email */}
           <div className="space-y-1.5">

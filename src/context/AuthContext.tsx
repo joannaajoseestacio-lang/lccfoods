@@ -11,12 +11,27 @@ import type { Session } from "@supabase/supabase-js";
 type Profile = {
   uid: string;
   name: string;
+  firstname: string;
+  lastname: string;
+  middle_initial: string;
   email: string;
   role: string;
   shop_name: string;
   shop_gcash: string;
   shop_description: string;
   image: string;
+  id_number: string;
+  shop_status: string;
+};
+
+type NewProfile = {
+  firstname: string;
+  lastname: string;
+  id_number: string;
+  email: string;
+  role: string;
+  password: string;
+  shop_name?: string;
 };
 
 type AuthContextType = {
@@ -24,14 +39,11 @@ type AuthContextType = {
   profile: Profile | null;
   loading: boolean;
   signupNewUser: (
-    email: string,
-    password: string,
-    name: string,
-    accountType: string
+    payload: NewProfile
   ) => Promise<{ success: boolean; error?: any }>;
   signInUser: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; error?: any }>;
   signOut: () => Promise<void>;
 };
@@ -50,16 +62,12 @@ export const AuthContextProvider = ({ children }: Props) => {
   // =============================
   // SIGN UP
   // =============================
-  const signupNewUser = async (
-    email: string,
-    password: string,
-    name: string,
-    accountType: string
-  ) => {
+  const signupNewUser = async (payload: NewProfile) => {
     try {
+      console.log("SIgning up:", payload);
       const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: payload.email,
+        password: payload.password,
       });
 
       if (error) return { success: false, error };
@@ -67,9 +75,13 @@ export const AuthContextProvider = ({ children }: Props) => {
 
       const { error: profileError } = await supabase.from("profiles").insert({
         uid: data.user.id,
-        name,
-        email,
-        role: accountType,
+        name: payload.firstname + " " + payload.lastname,
+        firstname: payload.firstname,
+        lastname: payload.lastname,
+        email: payload.email,
+        role: payload.role,
+        id_number: payload.id_number,
+        shop_name: payload.shop_name ?? null
       });
 
       if (profileError) return { success: false, error: profileError };
@@ -142,7 +154,6 @@ export const AuthContextProvider = ({ children }: Props) => {
         setProfile(null);
         return;
       }
-      
 
       const { data, error } = await supabase
         .from("profiles")

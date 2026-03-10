@@ -22,6 +22,7 @@ export interface Shop {
   created_at: string
   shop_description: string
   shop_gcash: string
+  shop_status: string
 }
 
 export interface Product {
