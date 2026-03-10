@@ -40,7 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MoreHorizontal, Pencil, Eye, Trash2, Download, Search, Loader2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Eye, Trash2, Download, Search, Loader2, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState, useMemo } from "react";
@@ -48,13 +48,14 @@ import { type Shop } from "@/lib/data";
 import { supabase } from "../../../SupabaseClient";
 import { toast } from "sonner";
 
-const variantStatusMap: Record<string, "secondary" | "destructive" | "default"> = {
+const variantStatusMap: Record<string, "secondary" | "destructive" | "default" | "outline"> = {
   pending: "secondary",
+  reviewing: "outline",
   rejected: "destructive",
   approved: "default",
 };
 
-// ── CSV Export ──────────────────────────────────────────────────────────────
+// ── CSV Export ────────────────────────────────────────────────────────────────
 function exportToCSV(shops: Shop[]) {
   const headers = ["ID", "Shop Name", "Description", "Owner", "GCash No.", "Status", "Created At"];
   const rows = shops.map((s) => [
@@ -84,7 +85,7 @@ function exportToCSV(shops: Shop[]) {
   URL.revokeObjectURL(url);
 }
 
-// ── View Details Dialog ──────────────────────────────────────────────────────
+// ── View Details Dialog ───────────────────────────────────────────────────────
 function ViewDetailsDialog({ shop, open, onClose }: { shop: Shop | null; open: boolean; onClose: () => void }) {
   if (!shop) return null;
   return (
@@ -140,7 +141,7 @@ function ViewDetailsDialog({ shop, open, onClose }: { shop: Shop | null; open: b
   );
 }
 
-// ── Edit Dialog ──────────────────────────────────────────────────────────────
+// ── Edit Dialog ───────────────────────────────────────────────────────────────
 function EditDialog({
   shop, open, onClose, onSave,
 }: {
@@ -153,7 +154,12 @@ function EditDialog({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (shop) setForm({ shop_name: shop.shop_name, shop_description: shop.shop_description, shop_gcash: shop.shop_gcash, shop_status: shop.shop_status });
+    if (shop) setForm({
+      shop_name: shop.shop_name,
+      shop_description: shop.shop_description,
+      shop_gcash: shop.shop_gcash,
+      shop_status: shop.shop_status,
+    });
   }, [shop]);
 
   const handleSave = async () => {
@@ -191,6 +197,7 @@ function EditDialog({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="reviewing">Reviewing</SelectItem>
                 <SelectItem value="approved">Approved</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
               </SelectContent>
@@ -209,7 +216,7 @@ function EditDialog({
   );
 }
 
-// ── Delete Alert ─────────────────────────────────────────────────────────────
+// ── Delete Alert ──────────────────────────────────────────────────────────────
 function DeleteAlert({
   shop, open, onClose, onConfirm,
 }: {
@@ -282,38 +289,27 @@ export default function StoresPage() {
 
   const handleEdit = async (updated: Partial<Shop>) => {
     if (!editShop) return;
-    const { error } = await supabase
-      .from("profiles")
-      .update(updated)
-      .eq("id", editShop.id);
-
-    if (error) {
-      toast.error("Failed to update store.");
-      return;
-    }
-
-    setShops((prev) =>
-      prev.map((s) => (s.id === editShop.id ? { ...s, ...updated } : s))
-    );
+    const { error } = await supabase.from("profiles").update(updated).eq("id", editShop.id);
+    if (error) { toast.error("Failed to update store."); return; }
+    setShops((prev) => prev.map((s) => (s.id === editShop.id ? { ...s, ...updated } : s)));
     toast.success("Store updated successfully.");
     setEditShop(null);
   };
 
   const handleDelete = async () => {
     if (!deleteShop) return;
-    const { error } = await supabase
-      .from("profiles")
-      .delete()
-      .eq("id", deleteShop.id);
-
-    if (error) {
-      toast.error("Failed to delete store.");
-      return;
-    }
-
+    const { error } = await supabase.from("profiles").delete().eq("id", deleteShop.id);
+    if (error) { toast.error("Failed to delete store."); return; }
     setShops((prev) => prev.filter((s) => s.id !== deleteShop.id));
     toast.success("Store deleted successfully.");
     setDeleteShop(null);
+  };
+
+  const handleStatusUpdate = async (shop: Shop, status: Shop["shop_status"]) => {
+    const { error } = await supabase.from("profiles").update({ shop_status: status }).eq("id", shop.id);
+    if (error) { toast.error("Failed to update status."); return; }
+    setShops((prev) => prev.map((s) => (s.id === shop.id ? { ...s, shop_status: status } : s)));
+    toast.success(`Store marked as ${status}.`);
   };
 
   return (
@@ -382,11 +378,7 @@ export default function StoresPage() {
                   <TableCell>
                     <div className="relative size-12 overflow-hidden rounded-md bg-muted">
                       {store.image ? (
-                        <img
-                          src={store.image}
-                          alt={store.name ?? "No image"}
-                          className="object-cover size-full"
-                        />
+                        <img src={store.image} alt={store.name ?? "No image"} className="object-cover size-full" />
                       ) : (
                         <div className="flex size-full items-center justify-center text-xs text-muted-foreground">
                           No img
@@ -430,6 +422,19 @@ export default function StoresPage() {
                           <Pencil className="size-4" />
                           Edit
                         </DropdownMenuItem>
+                        {(store.shop_status === "pending" || store.shop_status === "reviewing") && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => handleStatusUpdate(store, "approved")}>
+                              <CheckCircle className="size-4" />
+                              Approve
+                            </DropdownMenuItem>
+                            <DropdownMenuItem variant="destructive" onClick={() => handleStatusUpdate(store, "rejected")}>
+                              <XCircle className="size-4" />
+                              Reject
+                            </DropdownMenuItem>
+                          </>
+                        )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem variant="destructive" onClick={() => setDeleteShop(store)}>
                           <Trash2 className="size-4" />
