@@ -356,7 +356,7 @@ export function SignupForm({
           </div>
 
           <p className="text-xs text-gray-400">
-            Password must be at least 8 characters long.
+            Note: If some of the information autofilled from the Student ID Number is incorrect, please contact LCC IT Support or Admission Office to update your enrollment details.
           </p>
 
           {/* Submit */}

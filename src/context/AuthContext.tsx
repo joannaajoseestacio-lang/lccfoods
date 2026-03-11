@@ -100,6 +100,9 @@ export const AuthContextProvider = ({ children }: Props) => {
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
+        options: {
+          emailRedirectTo: "https://lccfoods.xyz"
+        }
       });
 
       if (error) return { success: false, error };

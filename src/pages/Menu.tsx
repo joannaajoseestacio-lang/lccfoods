@@ -19,7 +19,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [pending, setPending] = useState(true);
-  const { profile } = UserAuth();
+  const { profile, session } = UserAuth();
   const navigate = useNavigate();
 
  const isPWA = () => {
@@ -37,6 +37,7 @@ export default function Home() {
 
   useEffect(() => {
     if (profile) {
+      console.log(session)
       if (profile.role === "admin") {
         navigate("/admin");
       } else if (profile.role === "staff") {
@@ -45,7 +46,7 @@ export default function Home() {
         navigate("/");
       }
     }
-  }, [profile, navigate]);
+  }, [profile, session, navigate]);
 
   useEffect(() => {
     const loadProducts = async () => {
