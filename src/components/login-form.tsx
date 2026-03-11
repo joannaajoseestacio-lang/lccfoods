@@ -126,13 +126,6 @@ export function LoginForm({
               <label htmlFor="password" className="text-sm font-medium text-zinc-700">
                 Password
               </label>
-              <a
-                href="/forgot-password"
-                className="text-xs text-zinc-400 hover:text-zinc-600 underline underline-offset-2 transition-colors"
-                tabIndex={loading ? -1 : undefined}
-              >
-                Forgot password?
-              </a>
             </div>
             <Input
               id="password"
