@@ -81,7 +81,10 @@ export const AuthContextProvider = ({ children }: Props) => {
         email: payload.email,
         role: payload.role,
         id_number: payload.id_number,
-        shop_name: payload.shop_name ?? null
+        shop_name: payload.shop_name ?? null,
+        options: {
+          emailRedirectTo: "https://lccfoods.xyz"
+        }
       });
 
       if (profileError) return { success: false, error: profileError };
@@ -99,10 +102,7 @@ export const AuthContextProvider = ({ children }: Props) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
-        password,
-        options: {
-          emailRedirectTo: "https://lccfoods.xyz"
-        }
+        password
       });
 
       if (error) return { success: false, error };
